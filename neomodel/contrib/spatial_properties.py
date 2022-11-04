@@ -255,17 +255,13 @@ class PointProperty(Property):
         :param kwargs: Dictionary of arguments
         :type kwargs: dict
         """
-        if 'crs' in kwargs:
-            crs = kwargs['crs']
-            del(kwargs['crs'])
-        else:
-            crs = None
+        crs = kwargs.pop("crs", None)
 
         if crs is None or (crs not in ACCEPTABLE_CRS):
             raise ValueError('Invalid CRS({}). '
                              'Point properties require CRS to be one of {}'.format(crs, ','.join(ACCEPTABLE_CRS)))
 
-        # If a default value is passed and it is not a callable, then make sure it is in the right type
+        # If a default value is passed, and it is not a callable, then make sure it is in the right type
         if 'default' in kwargs:
             if not hasattr(kwargs['default'], "__call__"):
                 if not isinstance(kwargs['default'], NeomodelPoint):
